@@ -1,0 +1,5 @@
+build:
+	docker build -t nxc-template .
+
+run:
+	docker run -it nxc-template
