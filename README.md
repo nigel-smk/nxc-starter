@@ -1,3 +1,5 @@
+http://www.krizka.net/2009/12/27/starting-mindstorm-nxt-2-0-development-on-linux/
+
 http://bricxcc.sourceforge.net/nbc/
 
 http://www.clubengineer.org/online-learning/robotics/nxc-introduction.html
@@ -19,3 +21,10 @@ https://medium.com/@SaravSun/running-gui-applications-inside-docker-containers-8
 http://bricxcc.sourceforge.net/
 
 https://sourceforge.net/p/bricxcc/code/HEAD/tree/
+
+https://docs.docker.com/engine/install/ubuntu/
+https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue
+
+http://bricxcc.sourceforge.net/nbc/doc/nxtlinux.txt
+
+http://bricxcc.sourceforge.net/NXTFantomDriverHelp.pdf

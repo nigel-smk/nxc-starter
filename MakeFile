@@ -2,4 +2,10 @@ build:
 	docker build -t nxc-template .
 
 run:
-	docker run -it nxc-template
+	docker run -it --privileged -v /dev/bus/usb:/terminal/bus/usb -v `pwd`/code:/home nxc-template
+
+nxt-dat:
+	nexttool -listbricks > ~/nxt.dat
+
+check-usb:
+	lsusb | grep Lego
