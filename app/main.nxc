@@ -1,0 +1,105 @@
+#define COLORSENSOR SENSOR_3
+
+enum GyroState { CLOCKWISE, STOPPED, COUNTER_CLOCKWISE };
+enum Color { BLACK, BLUE, GREEN, YELLOW, RED, WHITE };
+
+struct Player {
+    bool buttonPressed;
+    byte inputPort;
+    int sensor;
+};
+
+Player p1;
+Player p2;
+GyroState gyroState;
+
+Player initPlayer(byte inputPort, int sensor) {
+    SetSensorTouch(inputPort);
+    Player player;
+    player.buttonPressed = false;
+    player.inputPort = inputPort;
+    player.sensor = sensor;
+    return player;
+}
+
+inline void changeDirection() {
+        if (gyroState == CLOCKWISE) {
+            gyroState = COUNTER_CLOCKWISE;
+            OnFwdSync(OUT_AB,100,100);
+        }
+        else {
+            gyroState = CLOCKWISE;
+            OnFwdSync(OUT_AB,100,-100);
+        }
+}
+
+inline void listenToButton(Player player) {
+    while (true) {
+        if (!player.buttonPressed) {
+            until(Sensor(player.sensor) == 1);
+            player.buttonPressed = true;
+            // call button down action
+            changeDirection();
+            Wait(100);
+        }
+        else {
+            until(Sensor(player.sensor) != 1);
+            player.buttonPressed = false;
+            ClearSensor(player.inputPort);
+            // call button up action
+            
+            Wait(100);
+        }
+    }
+}
+
+safecall void calibrate() {
+    // find one edge of color
+    OnFwdSync(OUT_AB,5,100);
+    until(COLORSENSOR == GREEN);
+    OffEx(OUT_AB, RESET_ALL);
+    // go a little past
+    OnFwdSync(OUT_AB,5,100);
+    Wait(2000);
+    // find other edge of color
+    OnFwdSync(OUT_AB,5,-100);
+    until(COLORSENSOR == GREEN);
+    OffEx(OUT_AB, RESET_ALL);
+
+    // calculate the midpoint
+    // long redRange = MotorTachoCount(OUT_A);
+    // long midPoint = redRange / 2;
+    // // continue moving until we hit the midpoint
+    // until(MotorTachoCount(OUT_A) == midPoint);
+    // OffEx(OUT_AB, RESET_ALL);
+} 
+
+task monitorLight() {
+    while (true) {
+        NumOut(60,LCD_LINE1, COLORSENSOR);
+        NumOut(60,LCD_LINE3, MotorTachoCount(OUT_A));
+    }
+}
+
+task calibrateTest() {
+    calibrate();
+}
+
+task listenToP1Button() {
+    listenToButton(p1);
+}
+
+task listenToP2Button() {
+    listenToButton(p2);
+}
+
+task main()
+{
+    /* Initial State */
+    GyroState gyroState = STOPPED;
+    p1 = initPlayer(IN_1, S1);
+    p2 = initPlayer(IN_2, S2);
+    SetSensorColorFull(IN_3);
+    Precedes(listenToP1Button, listenToP2Button, monitorLight, calibrateTest);
+
+}

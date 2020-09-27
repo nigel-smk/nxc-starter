@@ -28,3 +28,5 @@ https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-de
 http://bricxcc.sourceforge.net/nbc/doc/nxtlinux.txt
 
 http://bricxcc.sourceforge.net/NXTFantomDriverHelp.pdf
+
+https://sites.google.com/a/ruby4kids.com/nxc/Downhome/ultrasonic-sensor

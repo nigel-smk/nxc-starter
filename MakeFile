@@ -9,3 +9,6 @@ nxt-dat:
 
 check-usb:
 	lsusb | grep Lego
+
+load:
+	nbc -d app/main.nxc
